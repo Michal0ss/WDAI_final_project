@@ -1,98 +1,83 @@
 # Projekt Zaliczeniowy: Sklep Internetowy
 
-Projekt zrealizowany w ramach przedmiotu Wstęp do Aplikacji Internetowych. Aplikacja jest funkcjonalnym sklepem internetowym (frontend) wykorzystującym React.js oraz zewnętrzne API (FakeStoreAPI).
+Projekt zrealizowany w ramach przedmiotu **Wstęp do Aplikacji Internetowych**. Aplikacja to sklep internetowy napisany w React + Vite, z dodatkowym backendem (Express) obsługującym logowanie, opinie i zamówienia.
 
-## 🚀 Setup Projektu (Instalacja i Uruchomienie)
+## Instalacja i uruchomienie
 
-Aby uruchomić projekt lokalnie, wykonaj następujące kroki:
+1. **Sklonuj repozytorium:**
+   ```bash
+   git clone https://github.com/MaciejKlepacki/projektWDAI.git
+   ```
 
-1.  **Pobranie repozytorium:**
-    ```bash
-    git clone https://github.com/MaciejKlepacki/projektWDAI.git
-    ```
+2. **Frontend — instalacja zależności i start:**
+   ```bash
+   npm install
+   npm run dev
+   ```
+   Frontend będzie dostępny pod adresem podanym w terminalu.
 
-2.  **Instalacja zależności:**
-    Upewnij się, że masz zainstalowane środowisko Node.js.
-    ```bash
-    npm install
-    ```
+3. **Backend — instalacja i start:**
+   ```bash
+   cd server
+   npm install
+   npm run dev
+   ```
+   Domyślny adres serwera: `http://localhost:4000`
 
-3.  **Uruchomienie serwera developerskiego:**
-    ```bash
-    npm run dev
-    ```
-    Aplikacja będzie dostępna pod adresem wskazanym w terminalu.
+## 🛠 Technologie
 
-## 🛠 Użyta Technologia i Biblioteki
+**Frontend:**
+- React + Vite
+- React Router DOM
+- Lucide React
+- CSS (Flexbox/Grid)
 
-*   **Framework:** [React](https://react.dev/) + [Vite](https://vitejs.dev/)
-*   **Routing:** [React Router DOM](https://reactrouter.com/) (obsługa nawigacji SPA)
-*   **Ikony:** [Lucide React](https://lucide.dev/)
-*   **API:** [FakeStoreAPI](https://fakestoreapi.com/) (dane produktów)
-*   **Style:** CSS (Layout oparty na Flexbox/Grid, responsywność)
+**Backend:**
+- Node.js + Express
+- lowdb (prosta baza JSON)
+- bcrypt + JWT
 
-## 📋 Opis Funkcjonalności
+## Funkcjonalności
 
-### 1. Strona Główna (Home)
-*   Wyświetlanie listy produktów pobranych z API.
-*   **Wyszukiwarka:** Filtrowanie produktów po nazwie w czasie rzeczywistym.
-*   **Kategorie:** Możliwość filtrowania produktów po kategoriach (pobieranych dynamicznie).
+### 1) Strona główna
+- Lista produktów
+- Wyszukiwarka (filtrowanie po nazwie)
+- Filtrowanie po kategoriach
 
-### 2. Szczegóły Produktu (Product Details)
-*   Pełny opis produktu, cena, ocena, zdjęcie.
-*   **Dodawanie do koszyka:** Wybór ilości (zależne od losowo generowanego stanu magazynowego).
-*   **System Opinii:**
-    *   Możliwość dodania opinii (gwiazdki + komentarz) tylko dla zalogowanych użytkowników.
-    *   Walidacja: Użytkownik może dodać tylko jedną opinię do produktu.
-    *   **Uprawnienia:** Administrator może usuwać każdą opinię, użytkownik tylko swoją.
+### 2) Szczegóły produktu
+- Opis, cena, ocena, zdjęcie
+- Dodawanie do koszyka
+- System opinii:
+  - dodawanie przez zalogowanych
+  - 1 opinia na użytkownika
+  - admin może usuwać opinie
 
-### 3. Koszyk (Cart)
-*   Podgląd dodanych produktów.
-*   Zmiana ilości produktów.
-*   Usuwanie produktów.
-*   Podsumowanie kosztów.
-*   **Checkout:** Symulacja zakupu – wymaga zalogowania. Po zakupie koszyk jest czyszczony, a zamówienie trafia do historii.
+### 3) Koszyk
+- Podgląd produktów
+- Zmiana ilości / usuwanie
+- Podsumowanie kosztów
+- Checkout (wymaga logowania)
 
-### 4. Użytkownicy i Logowanie (Mock)
-Aplikacja posiada symulowany system autentykacji (dane przechowywane w Context API + localStorage).
+### 4) Logowanie
+- Logowanie oparte o backend
+- Sesja po odświeżeniu (token)
 
-**Dostępne konta testowe:**
-*   **Student 1:** `student1` / hasło dowolne
-*   **Student 2:** `student2` / hasło dowolne
-*   **Nauczyciel (Admin):** `teacher` / hasło dowolne
-*   **Admin:** `admin` / hasło dowolne
+### 5) Historia zamówień
+- Lista zamówień z datą i statusem
+- Szczegóły zamówienia
 
-_Funkcjonalności dodatkowe:_
-*   Zachowanie sesji po odświeżeniu strony (localStorage).
-*   Przekierowanie do logowania przy próbie zakupu bez konta.
+##  Konta testowe
 
-### 5. Historia Zamówień
-*   Lista złożonych zamówień z datą, ID, statusem i podsumowaniem kwoty.
-*   Rozwijane szczegóły każdego zamówienia (lista kupionych produktów).
+Hasło: `password`
 
-## 🖥️ Backend API (serwer + baza danych)
+- `student1`, `student2` — rola użytkownik
+- `teacher`, `admin` — rola admin
 
-W folderze **server/** znajduje się lekki serwer Express z prostą bazą danych w pliku JSON (lowdb). Umożliwia on prawdziwe logowanie, opinie i zamówienia
+##  Dokumentacja API
 
-### Uruchomienie serwera
-1. Wejdź do folderu `server` i zainstaluj zależności:
-    ```bash
-    npm install
-    ```
-2. Start serwera:
-    ```bash
-    npm run dev
-    ```
-   Domyślny adres: `http://localhost:4000`
+- Postman: [docs/postman_collection.json](docs/postman_collection.json)
+- OpenAPI: [docs/openapi.yaml](docs/openapi.yaml)
 
-### Dokumentacja Postman
-- Import kolekcji: [docs/postman_collection.json](docs/postman_collection.json)
-- Specyfikacja OpenAPI: [docs/openapi.yaml](docs/openapi.yaml)
-
-Domyślne konta (hasło: `password`):
-- `student1`, `student2` (user)
-- `teacher`, `admin` (admin)
-
-## 👥 Autorzy
-
-*   Maciej Klepacki
+## Autorzy
+- Michał Białas
+- Maciej Klepacki
