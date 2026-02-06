@@ -10,7 +10,7 @@ export default function Cart() {
   const { addToHistory } = useHistory();
   const navigate = useNavigate();
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!user) {
       alert('Please log in to proceed to checkout.');
       navigate('/login');
@@ -18,11 +18,14 @@ export default function Cart() {
     }
 
     if (cart.length === 0) return;
-
-    addToHistory(cart, cartTotal);
-    clearCart();
-    alert('Order placed successfully!');
-    navigate('/history');
+    try {
+      await addToHistory(cart, cartTotal);
+      clearCart();
+      alert('Order placed successfully!');
+      navigate('/history');
+    } catch (err) {
+      alert(err.message || 'Failed to place order.');
+    }
   };
 
   if (cart.length === 0) {

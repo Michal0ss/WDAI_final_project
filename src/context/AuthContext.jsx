@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
+import { loginUser, registerUser, logoutUser } from '../api';
 
 const AuthContext = createContext();
 
@@ -7,19 +8,6 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  // Mock initial users
-  const initialUsers = [
-    { username: 'student1', password: 'password', role: 'user' },
-    { username: 'student2', password: 'password', role: 'user' },
-    { username: 'teacher', password: 'password', role: 'admin' },
-    { username: 'admin', password: 'password', role: 'admin' }
-  ];
-
-  const [users, setUsers] = useState(() => {
-    const savedUsers = localStorage.getItem('users');
-    return savedUsers ? JSON.parse(savedUsers) : initialUsers;
-  });
-
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('user');
     return savedUser ? JSON.parse(savedUser) : null;
@@ -33,50 +21,36 @@ export function AuthProvider({ children }) {
     }
   }, [user]);
 
-  useEffect(() => {
-    localStorage.setItem('users', JSON.stringify(users));
-  }, [users]);
-
-  const login = (username, password) => {
-    const foundUser = users.find(u => u.username === username);
-
-    if (foundUser) {        
-       const role = foundUser.role;
-       const userData = {
-         id: Date.now(),
-         username: foundUser.username,
-         role
-       };
-       setUser(userData);
-       return { success: true };
+  const login = async (username, password) => {
+    try {
+      const result = await loginUser(username, password);
+      localStorage.setItem('auth_token', result.token);
+      setUser(result.user);
+      return { success: true };
+    } catch (error) {
+      return { success: false, message: error.message };
     }
-    return { success: false, message: 'Invalid username or password' };
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    try {
+      await logoutUser();
+    } catch {
+      // Ignore logout errors
+    } finally {
+      localStorage.removeItem('auth_token');
+      setUser(null);
+    }
   };
 
-  const register = (username, password) => {
-    if (users.find(u => u.username === username)) {
-        return { success: false, message: 'Username already taken' };
+  const register = async (username, password) => {
+    try {
+      const result = await registerUser(username, password);
+      setUser(result.user);
+      return { success: true };
+    } catch (error) {
+      return { success: false, message: error.message };
     }
-
-    const newUser = {
-      username,
-      password,
-      role: 'user'
-    };
-    
-    setUsers([...users, newUser]);
-    
-    const userData = {
-      id: Date.now(),
-      username,
-      role: 'user'
-    };
-    setUser(userData);
-    return { success: true };
   };
 
   return (

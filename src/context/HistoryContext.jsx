@@ -1,4 +1,5 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useCallback } from 'react';
+import { fetchOrders, createOrder } from '../api';
 
 const HistoryContext = createContext();
 
@@ -7,32 +8,25 @@ export function useHistory() {
 }
 
 export function HistoryProvider({ children }) {
-  const [orders, setOrders] = useState(() => {
-    const savedOrders = localStorage.getItem('orders');
-    return savedOrders ? JSON.parse(savedOrders) : [];
-  });
+  const [orders, setOrders] = useState([]);
 
-  useEffect(() => {
-    localStorage.setItem('orders', JSON.stringify(orders));
-  }, [orders]);
+  const loadOrders = useCallback(async () => {
+    const data = await fetchOrders();
+    setOrders(data);
+  }, []);
 
-  const addToHistory = (cartItems, total) => {
-    const newOrder = {
-      id: Date.now(),
-      date: new Date().toISOString(),
-      items: cartItems,
-      total: total,
-      status: 'Completed'
-    };
-    setOrders(prev => [newOrder, ...prev]);
-  };
+  const addToHistory = useCallback(async (cartItems, total) => {
+    const order = await createOrder(cartItems, total);
+    setOrders(prev => [order, ...prev]);
+    return order;
+  }, []);
 
   const clearHistory = () => {
     setOrders([]);
   };
 
   return (
-    <HistoryContext.Provider value={{ orders, addToHistory, clearHistory }}>
+    <HistoryContext.Provider value={{ orders, loadOrders, addToHistory, clearHistory }}>
       {children}
     </HistoryContext.Provider>
   );

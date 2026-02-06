@@ -1,0 +1,59 @@
+{
+  "users": [
+    {
+      "id": "u1",
+      "username": "student1",
+      "role": "user",
+      "passwordHash": "$2a$10$gP2ONRzlstuNuZkVB2/s5OX9jeNtkp2TFxApTRCgJDyArGz9CCgOe"
+    },
+    {
+      "id": "u2",
+      "username": "student2",
+      "role": "user",
+      "passwordHash": "$2a$10$.ZkZHwX2fNMjH26oaIp9DupaZ05ZgNqf.tvMOleFQIj/ptN8k2T6."
+    },
+    {
+      "id": "u3",
+      "username": "teacher",
+      "role": "admin",
+      "passwordHash": "$2a$10$C.cFtBPo7JIBVuILMhm.9.Aa9OmrwN0HXNL0d81zYRQc2s1uZZyxG"
+    },
+    {
+      "id": "u4",
+      "username": "admin",
+      "role": "admin",
+      "passwordHash": "$2a$10$P3s/YhZ4GmgSnlUEhIbXO.xRgiHO2eEeZHo8p3FZbcreBxB3SR.6O"
+    },
+    {
+      "id": "xQB4XKs8CKKg",
+      "username": "mbialas",
+      "role": "user",
+      "passwordHash": "$2a$10$2v.3C78G2rDTTW2bGiQ2vu9H39lEEsVrHP7pxMmREhS4dTE8i8Tg2"
+    }
+  ],
+  "reviews": [],
+  "orders": [
+    {
+      "id": "byEow6FUjD2G",
+      "userId": "xQB4XKs8CKKg",
+      "items": [
+        {
+          "id": 2,
+          "title": "Mens Casual Premium Slim Fit T-Shirts ",
+          "price": 22.3,
+          "description": "Slim-fitting style, contrast raglan long sleeve, three-button henley placket, light weight & soft fabric for breathable and comfortable wearing. And Solid stitched shirts with round neck made for durability and a great fit for casual fashion wear and diehard baseball fans. The Henley style round neckline includes a three-button placket.",
+          "category": "men's clothing",
+          "image": "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_t.png",
+          "rating": {
+            "rate": 4.1,
+            "count": 259
+          },
+          "quantity": 5
+        }
+      ],
+      "total": 111.5,
+      "status": "Completed",
+      "date": "2026-02-06T00:06:41.848Z"
+    }
+  ]
+}

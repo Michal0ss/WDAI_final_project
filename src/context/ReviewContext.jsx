@@ -1,4 +1,5 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useCallback } from 'react';
+import { fetchReviews, addProductReview, deleteProductReview } from '../api';
 
 const ReviewContext = createContext();
 
@@ -7,22 +8,18 @@ export function useReviews() {
 }
 
 export function ReviewProvider({ children }) {
-  const [reviews, setReviews] = useState(() => {
-    const savedReviews = localStorage.getItem('product_reviews');
-    // Initial mock data if empty
-    if (!savedReviews) {
-      return {
-        //{ productId: [review, review] }
-      };
-    }
-    return JSON.parse(savedReviews);
-  });
+  const [reviews, setReviews] = useState({});
 
-  useEffect(() => {
-    localStorage.setItem('product_reviews', JSON.stringify(reviews));
-  }, [reviews]);
+  const loadReviews = useCallback(async (productId) => {
+    const data = await fetchReviews(productId);
+    setReviews(prev => ({
+      ...prev,
+      [productId]: data
+    }));
+  }, []);
 
-  const addReview = (productId, review) => {
+  const addReview = useCallback(async (productId, rating, comment) => {
+    const review = await addProductReview(productId, rating, comment);
     setReviews(prev => {
       const productReviews = prev[productId] || [];
       return {
@@ -30,24 +27,24 @@ export function ReviewProvider({ children }) {
         [productId]: [review, ...productReviews]
       };
     });
-  };
+    return review;
+  }, []);
 
-  const getReviews = (productId) => {
-    return reviews[productId] || [];
-  };
+  const getReviews = (productId) => reviews[productId] || [];
 
-  const deleteReview = (productId, reviewId) => {
-      setReviews(prev => {
-          const productReviews = prev[productId] || [];
-          return {
-              ...prev,
-              [productId]: productReviews.filter(r => r.id !== reviewId)
-          }
-      })
-  }
+  const deleteReview = useCallback(async (productId, reviewId) => {
+    await deleteProductReview(productId, reviewId);
+    setReviews(prev => {
+      const productReviews = prev[productId] || [];
+      return {
+        ...prev,
+        [productId]: productReviews.filter(r => r.id !== reviewId)
+      };
+    });
+  }, []);
 
   return (
-    <ReviewContext.Provider value={{ reviews, addReview, getReviews, deleteReview }}>
+    <ReviewContext.Provider value={{ reviews, loadReviews, addReview, getReviews, deleteReview }}>
       {children}
     </ReviewContext.Provider>
   );

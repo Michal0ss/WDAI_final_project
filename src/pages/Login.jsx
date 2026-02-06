@@ -14,15 +14,15 @@ export default function Login() {
   const { login, register } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
     let result;
     if (isLogin) {
-      result = login(formData.username, formData.password);
+      result = await login(formData.username, formData.password);
     } else {
-      result = register(formData.username, formData.password);
+      result = await register(formData.username, formData.password);
     }
 
     if (result.success) {
@@ -118,10 +118,10 @@ export default function Login() {
         <div className="mock-credentials">
           <p><strong>Mock Credentials:</strong></p>
           <ul style={{ listStyle: 'none', padding: 0, marginTop: '0.5rem', fontSize: '0.875rem' }}>
-            <li>User: <b>student1</b> / any pass</li>
-            <li>User: <b>student2</b> / any pass</li>
-            <li>Admin: <b>teacher</b> / any pass</li>
-            <li>Admin: <b>admin</b> / any pass</li>
+            <li>User: <b>student1</b> / password</li>
+            <li>User: <b>student2</b> / password</li>
+            <li>Admin: <b>teacher</b> / password</li>
+            <li>Admin: <b>admin</b> / password</li>
           </ul>
         </div>
       </div>

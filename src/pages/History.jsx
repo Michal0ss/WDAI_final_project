@@ -1,9 +1,44 @@
 import { useHistory } from '../context/HistoryContext';
+import { useAuth } from '../context/AuthContext';
 import { Package, Calendar, ChevronDown, ChevronUp } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function History() {
-  const { orders } = useHistory();
+  const { orders, loadOrders } = useHistory();
+  const { user } = useAuth();
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    async function init() {
+      if (!user) return;
+      try {
+        await loadOrders();
+      } catch (err) {
+        setError(err.message || 'Failed to load orders');
+      }
+    }
+    init();
+  }, [loadOrders, user]);
+
+  if (!user) {
+    return (
+      <div className="page-container center-container">
+        <div style={{ textAlign: 'center' }}>
+          <Package size={48} style={{ color: '#94a3b8', marginBottom: '1rem' }} />
+          <h2>Please log in</h2>
+          <p style={{ color: '#64748b' }}>Log in to view your order history.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="page-container center-container">
+        <p className="error-text">{error}</p>
+      </div>
+    );
+  }
 
   if (orders.length === 0) {
     return (

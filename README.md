@@ -70,6 +70,29 @@ _Funkcjonalności dodatkowe:_
 *   Lista złożonych zamówień z datą, ID, statusem i podsumowaniem kwoty.
 *   Rozwijane szczegóły każdego zamówienia (lista kupionych produktów).
 
+## 🖥️ Backend API (serwer + baza danych)
+
+W folderze **server/** znajduje się lekki serwer Express z prostą bazą danych w pliku JSON (lowdb). Umożliwia on prawdziwe logowanie, opinie i zamówienia
+
+### Uruchomienie serwera
+1. Wejdź do folderu `server` i zainstaluj zależności:
+    ```bash
+    npm install
+    ```
+2. Start serwera:
+    ```bash
+    npm run dev
+    ```
+   Domyślny adres: `http://localhost:4000`
+
+### Dokumentacja Postman
+- Import kolekcji: [docs/postman_collection.json](docs/postman_collection.json)
+- Specyfikacja OpenAPI: [docs/openapi.yaml](docs/openapi.yaml)
+
+Domyślne konta (hasło: `password`):
+- `student1`, `student2` (user)
+- `teacher`, `admin` (admin)
+
 ## 👥 Autorzy
 
 *   Maciej Klepacki

@@ -10,7 +10,7 @@ import { useAuth } from '../context/AuthContext';
 export default function ProductDetails() {
   const { id } = useParams();
   const { addToCart } = useCart();
-  const { reviews, addReview, deleteReview } = useReviews();
+  const { reviews, loadReviews, addReview, deleteReview } = useReviews();
   const { user } = useAuth();
   
   const [product, setProduct] = useState(null);
@@ -29,6 +29,7 @@ export default function ProductDetails() {
       try {
         const data = await fetchProductById(id);
         setProduct(data);
+        await loadReviews(id);
         // Random stock between 0 and 50
         setStock(Math.floor(Math.random() * 50));
       } catch (err) {
@@ -38,14 +39,14 @@ export default function ProductDetails() {
       }
     }
     loadProduct();
-  }, [id]);
+  }, [id, loadReviews]);
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
     alert(`Added ${quantity} x ${product.title} to cart!`);
   };
 
-  const handleAddReview = (e) => {
+  const handleAddReview = async (e) => {
     e.preventDefault();
     if (!user) {
       alert('You must be logged in to leave a review.');
@@ -58,20 +59,20 @@ export default function ProductDetails() {
       return;
     }
 
-    const review = {
-      id: Date.now(),
-      username: user.username,
-      rating: newReview.rating,
-      comment: newReview.comment,
-      date: new Date().toISOString()
-    };
-    
-    addReview(id, review);
-    setNewReview({ rating: 5, comment: '' });
+    try {
+      await addReview(id, newReview.rating, newReview.comment);
+      setNewReview({ rating: 5, comment: '' });
+    } catch (err) {
+      alert(err.message || 'Failed to add review.');
+    }
   };
   
-  const handleDeleteReview = (reviewId) => {
-     deleteReview(id, reviewId);
+  const handleDeleteReview = async (reviewId) => {
+     try {
+       await deleteReview(id, reviewId);
+     } catch (err) {
+       alert(err.message || 'Failed to delete review.');
+     }
   }
 
   if (loading) return <div className="center-container"><Loader className="spinner" size={48} /></div>;
